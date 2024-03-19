@@ -1,10 +1,11 @@
 import json
 
 
-class HarFile():
+class HarFile:
     """
     Har File Spec - http://www.softwareishard.com/blog/har-12-spec/
     """
+
     def __init__(self):
         self.map = {
             "log": {
@@ -12,28 +13,22 @@ class HarFile():
                 "creator": {
                     "name": "urrlib2 interceptor",
                     "version": "0.0.1",
-                    "comment": "hic est dracones"
+                    "comment": "hic est dracones",
                 },
-                "entries": []
+                "entries": [],
             }
         }
 
     def _serialize_request_headers(self, request):
         headerEntries = []
         for key, value in request.header_items():
-            headerEntries.append({
-                "name": key,
-                "value": value
-            })
+            headerEntries.append({"name": key, "value": value})
         return headerEntries
 
     def _serialize_response_headers(self, response):
         headerEntries = []
         for key, value in response.headers.dict.items():
-            headerEntries.append({
-                "name": key,
-                "value": value
-            })
+            headerEntries.append({"name": key, "value": value})
         return headerEntries
 
     def _serialize_content(self, response):
@@ -42,7 +37,7 @@ class HarFile():
         return {
             "size": len(raw_data),
             "mimeType": info.getheader("Content-Type", "text/plain"),
-            "text": raw_data
+            "text": raw_data,
         }
 
     def _serialize_post_data(self, request):
@@ -52,7 +47,6 @@ class HarFile():
             "mimeType": content_type,
             "params": [],
             "text": data,
-
         }
 
     def add_entry(self, request, response, startDate, time):
@@ -82,7 +76,16 @@ class HarFile():
                 "bodySize": -1,
             },
             "cache": {},
-            "timings": {},
+            "timings": {
+                "blocked": -1,
+                "dns": -1,
+                "connect": -1,
+                "send": -1,
+                "wait": -1,
+                "receive": -1,
+                "ssl": -1,
+                "comment": "",
+            },
         }
         self.map["log"]["entries"].append(entry)
 
